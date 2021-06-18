@@ -1,0 +1,18 @@
+#+TITLE: AT42QT
+#+AUTHOR: Peter Polidoro
+#+EMAIL: peterpolidoro@gmail.com
+
+* Library Information
+  - Name :: AT42QT
+  - Version :: 0.1.0
+  - License :: BSD
+  - URL :: https://github.com/janelia-arduino/AT42QT
+  - Author :: Peter Polidoro
+  - Email :: peterpolidoro@gmail.com
+
+		Arduino library for the Microchip AT42QT series capacitive touch sensors.
+
+* Library Examples
+
+  [[./examples]]
+
