@@ -1,20 +1,15 @@
 // ----------------------------------------------------------------------------
-// AT42QT2120.h
+// AT42QT.cpp
 //
 // Authors:
 // Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
-#ifndef AT42QT2120_H
-#define AT42QT2120_H
-#include <Arduino.h>
-#include "AT42QT/AT42QT.h"
+#include "AT42QT.h"
 
 
-class AT42QT2120 : public AT42QT
+AT42QT::AT42QT(TwoWire & wire,
+  uint8_t device_address) :
+wire_ptr_(wire),
+device_address_(device_address)
 {
-public:
-  AT42QT2120(TwoWire & wire);
-private:
-};
-
-#endif
+}

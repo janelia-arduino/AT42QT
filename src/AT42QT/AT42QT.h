@@ -7,18 +7,28 @@
 // ----------------------------------------------------------------------------
 #ifndef AT42QT_H
 #define AT42QT_H
+#include <Wire.h>
 
 
-class Server
+class AT42QT
 {
+public:
+  AT42QT(TwoWire & wire,
+    uint8_t device_address);
+
 private:
+  TwoWire * wire_ptr_;
+  uint8_t device_address_;
+
+  const static uint8_t BITS_PER_BYTE = 8;
+  const static uint8_t BYTE_MAX = 0xFF;
+
   template<typename T>
-  void write(DeviceAddress device_address,
-    uint8_t register_address,
+  void write(uint8_t register_address,
     T data)
   {
     int byte_count = sizeof(data);
-    wire_ptr_->beginTransmission((uint8_t)device_address);
+    wire_ptr_->beginTransmission(device_address_);
     wire_ptr_->write(register_address);
     for (int byte_n=0; byte_n<byte_count; ++byte_n)
     {
@@ -28,16 +38,15 @@ private:
   }
 
   template<typename T>
-  void AT42QT::read(DeviceAddress device_address,
-    uint8_t register_address,
+  void AT42QT::read(uint8_t register_address,
     T & data)
   {
     int byte_count = sizeof(data);
-    wire_ptr_->beginTransmission((uint8_t)device_address);
+    wire_ptr_->beginTransmission(device_address_);
     wire_ptr_->write(register_address);
     wire_ptr_->endTransmission(false);
 
-    wire_ptr_->requestFrom(device_address,byte_count);
+    wire_ptr_->requestFrom(device_address_,byte_count);
     data = 0;
     for (int byte_n=0; byte_n<byte_count; ++byte_n)
     {
