@@ -14,7 +14,11 @@ class AT42QT
 {
 public:
   AT42QT(TwoWire & wire,
-    uint8_t device_address);
+    uint8_t device_address) :
+  wire_ptr_(&wire),
+  device_address_(device_address)
+  {}
+;
 
 private:
   TwoWire * wire_ptr_;
@@ -38,7 +42,7 @@ private:
   }
 
   template<typename T>
-  void AT42QT::read(uint8_t register_address,
+  void read(uint8_t register_address,
     T & data)
   {
     int byte_count = sizeof(data);
