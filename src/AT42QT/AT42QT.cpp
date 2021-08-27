@@ -8,13 +8,13 @@
 #include "AT42QT.h"
 
 
-AT42QT::AT42QT(TwoWire & wire,
-  uint8_t device_address,
-  uint8_t device_id,
+AT42QT::AT42QT(uint8_t device_address,
+  uint8_t chip_id,
+  TwoWire & wire,
   int8_t reset_pin) :
-wire_ptr_(&wire),
 device_address_(device_address),
-device_id_(device_id),
+chip_id_(chip_id),
+wire_ptr_(&wire),
 reset_pin_(reset_pin)
 {
   if(reset_pin_ >= 0)
@@ -40,13 +40,13 @@ void AT42QT::hardReset()
 uint8_t AT42QT::getChipId()
 {
   uint8_t chip_id;
-  read(0,chip_id);
+  read(CHIP_ID_REGISTER_ADDRESS,chip_id);
   return chip_id;
 }
 
 bool AT42QT::communicating()
 {
   uint8_t chip_id = getChipId();
-  return chip_id == device_id_;
+  return chip_id == chip_id_;
 }
 

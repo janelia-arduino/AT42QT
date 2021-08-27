@@ -8,15 +8,14 @@
 #ifndef AT42QT_H
 #define AT42QT_H
 #include <Wire.h>
-#include <Streaming.h>
 
 
 class AT42QT
 {
 public:
-  AT42QT(TwoWire & wire,
-    uint8_t device_address,
-    uint8_t device_id,
+  AT42QT(uint8_t device_address,
+    uint8_t chip_id,
+    TwoWire & wire,
     int8_t reset_pin);
 
   void begin();
@@ -25,9 +24,10 @@ public:
   bool communicating();
 
 private:
-  TwoWire * const wire_ptr_;
+  static const uint8_t CHIP_ID_REGISTER_ADDRESS = 0;
   const uint8_t device_address_;
-  const uint8_t device_id_;
+  const uint8_t chip_id_;
+  TwoWire * const wire_ptr_;
   const int8_t reset_pin_;
 
   const static uint8_t BITS_PER_BYTE = 8;
