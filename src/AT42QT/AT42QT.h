@@ -34,6 +34,8 @@ private:
   const static uint8_t BYTE_MAX = 0xFF;
 
 protected:
+  static const uint8_t NONZERO_VALUE = 1;
+
   template<typename T>
   void write(uint8_t register_address,
     const T & data)

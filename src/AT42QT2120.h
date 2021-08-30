@@ -18,7 +18,58 @@ public:
   AT42QT2120(TwoWire & wire=Wire,
     int8_t reset_pin=-1);
 
+  union DetectionStatus
+  {
+    struct Fields
+    {
+      uint8_t any_keys : 1;
+      uint8_t any_slider_wheel_channels : 1;
+      uint8_t space : 4;
+      uint8_t overflow : 1;
+      uint8_t calibrate : 1;
+    } fields;
+    uint8_t uint8;
+  };
+  DetectionStatus getDetectionStatus();
+  bool calibrating();
+  bool overflow();
+  bool sliderOrWheelTouched();
   bool anyKeyTouched();
+
+  union KeyStatus
+  {
+    struct Fields
+    {
+      uint16_t key_0 : 1;
+      uint16_t key_1 : 1;
+      uint16_t key_2 : 1;
+      uint16_t key_3 : 1;
+      uint16_t key_4 : 1;
+      uint16_t key_5 : 1;
+      uint16_t key_6 : 1;
+      uint16_t key_7 : 1;
+      uint16_t key_8 : 1;
+      uint16_t key_9 : 1;
+      uint16_t key_10 : 1;
+      uint16_t key_11 : 1;
+      uint16_t space : 4;
+    } fields;
+    uint16_t uint16;
+  };
+  KeyStatus getKeyStatus();
+
+  uint8_t getSliderPosition();
+
+  void triggerCalibration();
+
+  void reset();
+
+  // each interval is 16ms
+  // an interval_count of 4 equals 16ms*4=64ms between measurements
+  // power down device by writing a zero interval_count
+  // wake device by resetting or writing a nonzero interval_count
+  uint8_t getMeasurementIntervalCount();
+  void setMeasurementIntervalCount(uint8_t interval_count);
 private:
   enum struct RegisterAddresses {
     CHIP_ID = 0,
@@ -111,20 +162,6 @@ private:
   {
     AT42QT::read(static_cast<uint8_t>(register_address),data);
   }
-
-  union DetectionStatus
-  {
-    struct Fields
-    {
-      uint8_t any_keys : 1;
-      uint8_t any_slider_wheel_channels : 1;
-      uint8_t space : 4;
-      uint8_t overflow : 1;
-      uint8_t calibrate : 1;
-    } fields;
-    uint8_t uint8;
-  };
-  DetectionStatus getDetectionStatus();
 
 };
 
