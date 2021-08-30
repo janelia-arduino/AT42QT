@@ -16,6 +16,7 @@ public:
   AT42QT(uint8_t device_address,
     uint8_t chip_id,
     TwoWire & wire,
+    int8_t change_pin,
     int8_t reset_pin);
 
   void begin();
@@ -28,6 +29,7 @@ private:
   const uint8_t device_address_;
   const uint8_t chip_id_;
   TwoWire * const wire_ptr_;
+  const int8_t change_pin_;
   const int8_t reset_pin_;
 
   const static uint8_t BITS_PER_BYTE = 8;

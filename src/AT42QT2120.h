@@ -16,6 +16,7 @@ public:
   static const uint8_t CHIP_ID = 0x3E;
 
   AT42QT2120(TwoWire & wire=Wire,
+    int8_t change_pin=-1,
     int8_t reset_pin=-1);
 
   union DetectionStatus
