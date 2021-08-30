@@ -24,7 +24,7 @@ public:
   bool communicating();
 
 private:
-  static const uint8_t CHIP_ID_REGISTER_ADDRESS = 0;
+  static const uint8_t REGISTER_ADDRESS_CHIP_ID = 0;
   const uint8_t device_address_;
   const uint8_t chip_id_;
   TwoWire * const wire_ptr_;
@@ -33,9 +33,10 @@ private:
   const static uint8_t BITS_PER_BYTE = 8;
   const static uint8_t BYTE_MAX = 0xFF;
 
+protected:
   template<typename T>
   void write(uint8_t register_address,
-    T data)
+    const T & data)
   {
     uint8_t byte_count = sizeof(data);
     wire_ptr_->beginTransmission(device_address_);

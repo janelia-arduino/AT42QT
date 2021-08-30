@@ -18,10 +18,9 @@ public:
   AT42QT2120(TwoWire & wire=Wire,
     int8_t reset_pin=-1);
 
-  bool anyTouched();
-
+  bool anyKeyTouched();
 private:
-  enum struct RegisterAddress {
+  enum struct RegisterAddresses {
     CHIP_ID = 0,
     FIRMWARE_VERSION,
     DETECTION_STATUS,
@@ -98,6 +97,34 @@ private:
     KEY10_REFERENCE = 96,
     KEY11_REFERENCE = 98,	
   };
+
+  template<typename T>
+  void write(RegisterAddresses register_address,
+    const T & data)
+  {
+    AT42QT::write(static_cast<uint8_t>(register_address),data);
+  }
+
+  template<typename T>
+  void read(RegisterAddresses register_address,
+    T & data)
+  {
+    AT42QT::read(static_cast<uint8_t>(register_address),data);
+  }
+
+  union DetectionStatus
+  {
+    struct Fields
+    {
+      uint8_t any_keys : 1;
+      uint8_t any_slider_wheel_channels : 1;
+      uint8_t space : 4;
+      uint8_t overflow : 1;
+      uint8_t calibrate : 1;
+    } fields;
+    uint8_t uint8;
+  };
+  DetectionStatus getDetectionStatus();
 
 };
 

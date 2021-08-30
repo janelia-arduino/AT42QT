@@ -40,7 +40,7 @@ void AT42QT::hardReset()
 uint8_t AT42QT::getChipId()
 {
   uint8_t chip_id;
-  read(CHIP_ID_REGISTER_ADDRESS,chip_id);
+  read(REGISTER_ADDRESS_CHIP_ID,chip_id);
   return chip_id;
 }
 
