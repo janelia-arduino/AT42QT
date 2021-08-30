@@ -1,4 +1,5 @@
 #include <AT42QT2120.h>
+#include <Wire.h>
 #include <Streaming.h>
 
 
@@ -6,7 +7,16 @@ const long BAUD = 115200;
 const int RESET_DELAY = 2000;
 const int CALIBRATION_LOOP_DELAY = 50;
 
-AT42QT2120 touch_sensor;
+const int CHANGE_PIN = 12;
+
+AT42QT2120 touch_sensor(Wire,CHANGE_PIN);
+
+bool change_line_activated = false;
+
+void changeLineActivated()
+{
+  change_line_activated = true;
+}
 
 void setup()
 {
@@ -27,8 +37,25 @@ void setup()
     delay(CALIBRATION_LOOP_DELAY);
   }
   Serial << "finished calibrating" << endl;
+
+  // change line is pulled low 85ms after reset
+  // must read any device memory location to clear change line
+  touch_sensor.getDetectionStatus();
+
+  touch_sensor.attachChangeCallback(changeLineActivated);
+
+  Serial << "waiting for touch..." << endl;
 }
 
 void loop()
 {
+  if (change_line_activated)
+  {
+    change_line_activated = false;
+    if (touch_sensor.anyKeyTouched())
+    {
+      Serial << "key_touched!" << endl;
+      touch_sensor.getKeyStatus();
+    }
+  }
 }

@@ -58,3 +58,11 @@ bool AT42QT::communicating()
   return chip_id == chip_id_;
 }
 
+void AT42QT::attachChangeCallback(const Callback callback)
+{
+  if(change_pin_ >= 0)
+  {
+    attachInterrupt(digitalPinToInterrupt(change_pin_),callback,FALLING);
+  }
+}
+

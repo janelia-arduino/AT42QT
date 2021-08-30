@@ -24,6 +24,9 @@ public:
   uint8_t getChipId();
   bool communicating();
 
+  typedef void (*Callback)();
+  void attachChangeCallback(const Callback callback);
+
 private:
   static const uint8_t REGISTER_ADDRESS_CHIP_ID = 0;
   const uint8_t device_address_;
