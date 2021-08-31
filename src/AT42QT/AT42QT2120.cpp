@@ -15,42 +15,17 @@ AT42QT(DEVICE_ADDRESS,CHIP_ID,wire,change_pin,reset_pin)
 {
 }
 
-AT42QT2120::DetectionStatus AT42QT2120::getDetectionStatus()
+AT42QT2120::Status AT42QT2120::getStatus()
 {
-  DetectionStatus detection_status;
-  read(RegisterAddresses::DETECTION_STATUS,detection_status.uint8);
-  return detection_status;
-}
-
-bool AT42QT2120::anyKeyTouched()
-{
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.any_keys;
-}
-
-bool AT42QT2120::sliderOrWheelTouched()
-{
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.any_slider_wheel_channels;
-}
-
-bool AT42QT2120::overflow()
-{
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.overflow;
+  Status status;
+  read(RegisterAddresses::DETECTION_STATUS,status.uint32);
+  return status;
 }
 
 bool AT42QT2120::calibrating()
 {
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.calibrate;
-}
-
-AT42QT2120::KeyStatus AT42QT2120::getKeyStatus()
-{
-  KeyStatus key_status;
-  read(RegisterAddresses::KEY_STATUS,key_status.uint16);
-  return key_status;
+  Status status = getStatus();
+  return status.calibrating;
 }
 
 uint8_t AT42QT2120::getSliderPosition()

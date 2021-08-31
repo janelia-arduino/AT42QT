@@ -11,7 +11,7 @@ const int CHANGE_PIN = 12;
 
 AT42QT2120 touch_sensor(Wire,CHANGE_PIN);
 
-bool change_line_activated = false;
+volatile bool change_line_activated = false;
 
 void changeLineActivated()
 {
@@ -52,10 +52,17 @@ void loop()
   if (change_line_activated)
   {
     change_line_activated = false;
-    if (touch_sensor.anyKeyTouched())
-    {
-      Serial << "key_touched!" << endl;
-      touch_sensor.getKeyStatus();
-    }
+    uint32_t status = touch_sensor.getStatus();
+    Serial << "status: " << _BIN(status) << endl;
+    // if (touch_sensor.anyKeyTouched())
+    // {
+    //   AT42QT2120::KeyStatus key_status = touch_sensor.getKeyStatus();
+    //   Serial << "key_status.uint16: " << _BIN(key_status.uint16) << endl;
+
+    //   uint8_t slider_position = touch_sensor.getSliderPosition();
+    //   Serial << "slider_position: " << slider_position << endl;
+
+
+    // }
   }
 }

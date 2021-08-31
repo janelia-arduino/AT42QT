@@ -19,45 +19,33 @@ public:
     int8_t change_pin=-1,
     int8_t reset_pin=-1);
 
-  union DetectionStatus
+  union Status
   {
-    struct Fields
+    struct
     {
-      uint8_t any_keys : 1;
-      uint8_t any_slider_wheel_channels : 1;
-      uint8_t space : 4;
-      uint8_t overflow : 1;
-      uint8_t calibrate : 1;
-    } fields;
-    uint8_t uint8;
+      uint32_t any_key : 1;
+      uint32_t slider : 1;
+      uint32_t space0 : 4;
+      uint32_t overflow : 1;
+      uint32_t calibrating : 1;
+      uint32_t key_0 : 1;
+      uint32_t key_1 : 1;
+      uint32_t key_2 : 1;
+      uint32_t key_3 : 1;
+      uint32_t key_4 : 1;
+      uint32_t key_5 : 1;
+      uint32_t key_6 : 1;
+      uint32_t key_7 : 1;
+      uint32_t key_8 : 1;
+      uint32_t key_9 : 1;
+      uint32_t key_10 : 1;
+      uint32_t key_11 : 1;
+      uint32_t space1 : 4;
+    };
+    uint32_t uint32;
   };
-  DetectionStatus getDetectionStatus();
-  bool anyKeyTouched();
-  bool sliderOrWheelTouched();
-  bool overflow();
+  Status getStatus();
   bool calibrating();
-
-  union KeyStatus
-  {
-    struct Fields
-    {
-      uint16_t key_0 : 1;
-      uint16_t key_1 : 1;
-      uint16_t key_2 : 1;
-      uint16_t key_3 : 1;
-      uint16_t key_4 : 1;
-      uint16_t key_5 : 1;
-      uint16_t key_6 : 1;
-      uint16_t key_7 : 1;
-      uint16_t key_8 : 1;
-      uint16_t key_9 : 1;
-      uint16_t key_10 : 1;
-      uint16_t key_11 : 1;
-      uint16_t space : 4;
-    } fields;
-    uint16_t uint16;
-  };
-  KeyStatus getKeyStatus();
 
   uint8_t getSliderPosition();
 
