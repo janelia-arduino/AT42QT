@@ -32,10 +32,10 @@ public:
     uint8_t uint8;
   };
   DetectionStatus getDetectionStatus();
-  bool calibrating();
-  bool overflow();
-  bool sliderOrWheelTouched();
   bool anyKeyTouched();
+  bool sliderOrWheelTouched();
+  bool overflow();
+  bool calibrating();
 
   union KeyStatus
   {
@@ -72,7 +72,8 @@ public:
   uint8_t getMeasurementIntervalCount();
   void setMeasurementIntervalCount(uint8_t interval_count);
 private:
-  enum struct RegisterAddresses {
+  enum struct RegisterAddresses
+  {
     CHIP_ID = 0,
     FIRMWARE_VERSION,
     DETECTION_STATUS,

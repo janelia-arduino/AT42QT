@@ -22,16 +22,10 @@ AT42QT2120::DetectionStatus AT42QT2120::getDetectionStatus()
   return detection_status;
 }
 
-bool AT42QT2120::calibrating()
+bool AT42QT2120::anyKeyTouched()
 {
   DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.calibrate;
-}
-
-bool AT42QT2120::overflow()
-{
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.overflow;
+  return detection_status.fields.any_keys;
 }
 
 bool AT42QT2120::sliderOrWheelTouched()
@@ -40,10 +34,16 @@ bool AT42QT2120::sliderOrWheelTouched()
   return detection_status.fields.any_slider_wheel_channels;
 }
 
-bool AT42QT2120::anyKeyTouched()
+bool AT42QT2120::overflow()
 {
   DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.any_keys;
+  return detection_status.fields.overflow;
+}
+
+bool AT42QT2120::calibrating()
+{
+  DetectionStatus detection_status = getDetectionStatus();
+  return detection_status.fields.calibrate;
 }
 
 AT42QT2120::KeyStatus AT42QT2120::getKeyStatus()

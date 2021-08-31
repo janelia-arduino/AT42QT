@@ -14,13 +14,14 @@
 
 	This library works with AT42QT1060, AT42QT1070, AT42QT2120, and AT42QT2160.
 
-** Functionality Implemented
+** Functionality
 	
-	| Complete | Partial    | Basic      |
-	|----------+------------+------------|
-	|          | AT42QT2120 | AT42QT1060 |
-	|          |            | AT42QT1070 |
-	|          |            | AT42WT2160 |
+	| Device     | Key Count Max | Completeness | Compiles | Tested on Hardware |
+	|------------+---------------+--------------+----------+--------------------|
+	| AT42QT1060 |             6 | Basic        | Yes      | No                 |
+	| AT42QT1070 |             7 | Basic        | Yes      | No                 |
+	| AT42QT2120 |            12 | Partial      | Yes      | Yes                |
+	| AT42WT2160 |   16 (Matrix) | Basic        | Yes      | No                 |
 
 * Library Examples
 
