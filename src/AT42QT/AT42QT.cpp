@@ -5,7 +5,7 @@
 // Authors:
 // Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
-#include "AT42QT.h"
+#include "../AT42QT.h"
 
 
 AT42QT::AT42QT(uint8_t device_address,

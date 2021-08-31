@@ -6,7 +6,7 @@
 // ----------------------------------------------------------------------------
 #ifndef AT42QT2120_H
 #define AT42QT2120_H
-#include "AT42QT/AT42QT.h"
+#include "AT42QT.h"
 
 
 class AT42QT2120 : public AT42QT

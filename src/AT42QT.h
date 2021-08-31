@@ -15,9 +15,9 @@ class AT42QT
 public:
   AT42QT(uint8_t device_address,
     uint8_t chip_id,
-    TwoWire & wire,
-    int8_t change_pin,
-    int8_t reset_pin);
+    TwoWire & wire=Wire,
+    int8_t change_pin=-1,
+    int8_t reset_pin=-1);
 
   void begin();
   void hardReset();

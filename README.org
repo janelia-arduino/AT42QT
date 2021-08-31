@@ -10,7 +10,17 @@
   - Author :: Peter Polidoro
   - Email :: peterpolidoro@gmail.com
 
-		Arduino library for the Microchip AT42QT series capacitive touch sensors.
+		Arduino library for the Microchip AT42QTxxxx family of capacitive touch controllers.
+
+	This library works with AT42QT1060, AT42QT1070, AT42QT2120, and AT42QT2160.
+
+** Functionality Implemented
+	
+	| Complete | Partial    | Basic      |
+	|----------+------------+------------|
+	|          | AT42QT2120 | AT42QT1060 |
+	|          |            | AT42QT1070 |
+	|          |            | AT42WT2160 |
 
 * Library Examples
 
