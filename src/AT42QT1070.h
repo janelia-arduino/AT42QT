@@ -37,6 +37,7 @@ public:
     };
     uint16_t bytes;
   };
+  static const uint8_t STATUS_SIZE = 2;
   Status getStatus();
   bool calibrating();
 private:

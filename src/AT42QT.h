@@ -42,15 +42,25 @@ private:
   const static uint8_t BYTE_MAX = 0xFF;
 
 protected:
-  static const uint8_t NONZERO_VALUE = 1;
+  const uint8_t NONZERO_VALUE = 1;
 
   template<typename Data>
   void write(RegisterAddress register_address,
     const Data & data);
 
   template<typename Data>
+  void write(RegisterAddress register_address,
+    const Data & data,
+    uint8_t data_size);
+
+  template<typename Data>
   void read(RegisterAddress register_address,
     Data & data);
+
+  template<typename Data>
+  void read(RegisterAddress register_address,
+    Data & data,
+    uint8_t data_size);
 };
 #include "AT42QT/AT42QTDefinitions.h"
 #endif

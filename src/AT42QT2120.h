@@ -33,14 +33,14 @@ public:
       uint32_t overflow : 1;
       uint32_t calibrating : 1;
       uint32_t keys: 12;
-      uint32_t space1 : 12;
+      uint32_t space1 : 4;
+      uint32_t slider_position : 8;
     };
     uint32_t bytes;
   };
+  static const uint8_t STATUS_SIZE = 4;
   Status getStatus();
   bool calibrating();
-
-  uint8_t getSliderPosition();
 
   // each interval is 16ms
   // an interval_count of 4 equals 16ms*4=64ms between measurements

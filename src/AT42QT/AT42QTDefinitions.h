@@ -90,10 +90,24 @@ template<typename Data>
 void AT42QT<RegisterAddress>::write(RegisterAddress register_address,
   const Data & data)
 {
-  uint8_t byte_count = sizeof(data);
+  uint8_t data_size = sizeof(data);
+  write(register_address,data,data_size);
+}
+
+template<typename RegisterAddress>
+template<typename Data>
+void AT42QT<RegisterAddress>::write(RegisterAddress register_address,
+  const Data & data,
+  uint8_t data_size)
+{
+  uint8_t data_size_check = sizeof(data);
+  if (data_size_check < data_size)
+  {
+    data_size = data_size_check;
+  }
   wire_ptr_->beginTransmission(device_address_);
   wire_ptr_->write(static_cast<uint8_t>(register_address));
-  for (uint8_t byte_n=0; byte_n<byte_count; ++byte_n)
+  for (uint8_t byte_n=0; byte_n<data_size; ++byte_n)
   {
     wire_ptr_->write((data >> (BITS_PER_BYTE * byte_n)) & BYTE_MAX);
   }
@@ -105,14 +119,28 @@ template<typename Data>
 void AT42QT<RegisterAddress>::read(RegisterAddress register_address,
   Data & data)
 {
-  uint8_t byte_count = sizeof(data);
+  uint8_t data_size = sizeof(data);
+  read(register_address,data,data_size);
+}
+
+template<typename RegisterAddress>
+template<typename Data>
+void AT42QT<RegisterAddress>::read(RegisterAddress register_address,
+  Data & data,
+  uint8_t data_size)
+{
+  uint8_t data_size_check = sizeof(data);
+  if (data_size_check < data_size)
+  {
+    data_size = data_size_check;
+  }
   wire_ptr_->beginTransmission(device_address_);
   wire_ptr_->write(static_cast<uint8_t>(register_address));
   wire_ptr_->endTransmission(false);
 
-  wire_ptr_->requestFrom(device_address_,byte_count);
+  wire_ptr_->requestFrom(device_address_,data_size);
   data = 0;
-  for (uint8_t byte_n=0; byte_n<byte_count; ++byte_n)
+  for (uint8_t byte_n=0; byte_n<data_size; ++byte_n)
   {
     data |= (wire_ptr_->read()) << (BITS_PER_BYTE * byte_n);
   }

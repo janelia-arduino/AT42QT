@@ -27,16 +27,19 @@ public:
   {
     struct
     {
-      uint32_t slider : 1;
-      uint32_t common_change : 1;
-      uint32_t space0 : 4;
-      uint32_t cycle_overrun : 1;
-      uint32_t was_reset : 1;
-      uint32_t keys : 16;
-      uint32_t slider_position : 8;
+      uint64_t slider : 1;
+      uint64_t common_change : 1;
+      uint64_t space0 : 4;
+      uint64_t cycle_overrun : 1;
+      uint64_t was_reset : 1;
+      uint64_t keys : 16;
+      uint64_t slider_position : 8;
+      uint64_t gpio : 8;
+      uint64_t space1 : 8;
     };
-    uint32_t bytes;
+    uint64_t bytes;
   };
+  static const uint8_t STATUS_SIZE = 5;
   Status getStatus();
 };
 

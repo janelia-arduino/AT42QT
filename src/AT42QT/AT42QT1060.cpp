@@ -11,7 +11,7 @@
 AT42QT1060::Status AT42QT1060::getStatus()
 {
   Status status;
-  read(RegisterAddresses::AT42QT1060::DETECTION_STATUS,status.bytes);
+  read(RegisterAddresses::AT42QT1060::DETECTION_STATUS,status.bytes,STATUS_SIZE);
   return status;
 }
 

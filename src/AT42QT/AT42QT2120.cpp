@@ -11,7 +11,7 @@
 AT42QT2120::Status AT42QT2120::getStatus()
 {
   Status status;
-  read(RegisterAddresses::AT42QT2120::DETECTION_STATUS,status.bytes);
+  read(RegisterAddresses::AT42QT2120::DETECTION_STATUS,status.bytes,STATUS_SIZE);
   return status;
 }
 
@@ -19,13 +19,6 @@ bool AT42QT2120::calibrating()
 {
   Status status = getStatus();
   return status.calibrating;
-}
-
-uint8_t AT42QT2120::getSliderPosition()
-{
-  uint8_t slider_position;
-  read(RegisterAddresses::AT42QT2120::SLIDER_POSITION,slider_position);
-  return slider_position;
 }
 
 uint8_t AT42QT2120::getMeasurementIntervalCount()
