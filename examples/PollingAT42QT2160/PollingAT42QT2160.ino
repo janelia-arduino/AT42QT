@@ -48,28 +48,26 @@ void loop()
   uint8_t chip_id = touch_sensor.getChipId();
   Serial << "chip_id: " << _HEX(chip_id) << endl;
 
-  bool any_key_touched = touch_sensor.anyKeyTouched();
-  Serial << "any_key_touched: " << any_key_touched << endl;
+  AT42QT2160::Status status = touch_sensor.getStatus();
 
-  AT42QT2160::KeyStatus key_status = touch_sensor.getKeyStatus();
-  Serial << "key_status: " << endl;
+  Serial << "status.keys: " << _BIN(status.keys) << endl;
   Serial << "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15" << endl;
-  Serial << key_status.fields.key_0 << "  " \
-         << key_status.fields.key_1 << "  " \
-         << key_status.fields.key_2 << "  " \
-         << key_status.fields.key_3 << "  " \
-         << key_status.fields.key_4 << "  " \
-         << key_status.fields.key_5 << "  " \
-         << key_status.fields.key_6 << "  " \
-         << key_status.fields.key_7 << "  " \
-         << key_status.fields.key_8 << "  " \
-         << key_status.fields.key_9 << "  " \
-         << key_status.fields.key_10 << "  " \
-         << key_status.fields.key_11 << "  " \
-         << key_status.fields.key_12 << "  " \
-         << key_status.fields.key_13 << "  " \
-         << key_status.fields.key_14 << "  " \
-         << key_status.fields.key_15 << endl;
+  Serial << bitRead(status.keys,0) << "  "      \
+         << bitRead(status.keys,1) << "  "      \
+         << bitRead(status.keys,2) << "  "      \
+         << bitRead(status.keys,3) << "  "      \
+         << bitRead(status.keys,4) << "  "      \
+         << bitRead(status.keys,5) << "  "      \
+         << bitRead(status.keys,6) << "  "      \
+         << bitRead(status.keys,7) << "  "      \
+         << bitRead(status.keys,8) << "  "      \
+         << bitRead(status.keys,9) << "  "      \
+         << bitRead(status.keys,10) << "  "     \
+         << bitRead(status.keys,11) << "  "     \
+         << bitRead(status.keys,12) << "  "     \
+         << bitRead(status.keys,13) << "  "     \
+         << bitRead(status.keys,14) << "  "     \
+         << bitRead(status.keys,15) << endl;
 
   Serial << endl;
   ++loop_counter;

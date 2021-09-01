@@ -41,13 +41,13 @@ private:
 protected:
   static const uint8_t NONZERO_VALUE = 1;
 
-  template<typename T>
-  void write(uint8_t register_address,
-    const T & data)
+  template<typename RegisterAddress, typename Data>
+  void write(RegisterAddress register_address,
+    const Data & data)
   {
     uint8_t byte_count = sizeof(data);
     wire_ptr_->beginTransmission(device_address_);
-    wire_ptr_->write(register_address);
+    wire_ptr_->write(static_cast<uint8_t>(register_address));
     for (uint8_t byte_n=0; byte_n<byte_count; ++byte_n)
     {
       wire_ptr_->write((data >> (BITS_PER_BYTE * byte_n)) & BYTE_MAX);
@@ -55,13 +55,13 @@ protected:
     wire_ptr_->endTransmission();
   }
 
-  template<typename T>
-  void read(uint8_t register_address,
-    T & data)
+  template<typename RegisterAddress, typename Data>
+  void read(RegisterAddress register_address,
+    Data & data)
   {
     uint8_t byte_count = sizeof(data);
     wire_ptr_->beginTransmission(device_address_);
-    wire_ptr_->write(register_address);
+    wire_ptr_->write(static_cast<uint8_t>(register_address));
     wire_ptr_->endTransmission(false);
 
     wire_ptr_->requestFrom(device_address_,byte_count);

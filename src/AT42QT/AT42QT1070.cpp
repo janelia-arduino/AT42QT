@@ -15,36 +15,17 @@ AT42QT(DEVICE_ADDRESS,CHIP_ID,wire,change_pin,reset_pin)
 {
 }
 
-AT42QT1070::DetectionStatus AT42QT1070::getDetectionStatus()
+AT42QT1070::Status AT42QT1070::getStatus()
 {
-  DetectionStatus detection_status;
-  read(RegisterAddresses::DETECTION_STATUS,detection_status.uint8);
-  return detection_status;
-}
-
-bool AT42QT1070::anyKeyTouched()
-{
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.any_keys;
-}
-
-bool AT42QT1070::overflow()
-{
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.overflow;
+  Status status;
+  read(RegisterAddresses::DETECTION_STATUS,status.bytes);
+  return status;
 }
 
 bool AT42QT1070::calibrating()
 {
-  DetectionStatus detection_status = getDetectionStatus();
-  return detection_status.fields.calibrate;
-}
-
-AT42QT1070::KeyStatus AT42QT1070::getKeyStatus()
-{
-  KeyStatus key_status;
-  read(RegisterAddresses::DETECTION_STATUS,key_status.uint8);
-  return key_status;
+  Status status = getStatus();
+  return status.calibrating;
 }
 
 void AT42QT1070::triggerCalibration()

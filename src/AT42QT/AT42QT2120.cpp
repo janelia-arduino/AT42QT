@@ -18,7 +18,7 @@ AT42QT(DEVICE_ADDRESS,CHIP_ID,wire,change_pin,reset_pin)
 AT42QT2120::Status AT42QT2120::getStatus()
 {
   Status status;
-  read(RegisterAddresses::DETECTION_STATUS,status.uint32);
+  read(RegisterAddresses::DETECTION_STATUS,status.bytes);
   return status;
 }
 

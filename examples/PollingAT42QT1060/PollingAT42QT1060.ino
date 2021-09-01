@@ -53,18 +53,16 @@ void loop()
   uint8_t chip_id = touch_sensor.getChipId();
   Serial << "chip_id: " << _HEX(chip_id) << endl;
 
-  bool any_key_touched = touch_sensor.anyKeyTouched();
-  Serial << "any_key_touched: " << any_key_touched << endl;
+  AT42QT1060::Status status = touch_sensor.getStatus();
 
-  AT42QT1060::KeyStatus key_status = touch_sensor.getKeyStatus();
-  Serial << "key_status: " << endl;
+  Serial << "status.keys: " << _BIN(status.keys) << endl;
   Serial << "0  1  2  3  4  5" << endl;
-  Serial << key_status.fields.key_0 << "  " \
-         << key_status.fields.key_1 << "  " \
-         << key_status.fields.key_2 << "  " \
-         << key_status.fields.key_3 << "  " \
-         << key_status.fields.key_4 << "  " \
-         << key_status.fields.key_5 << endl;
+  Serial << bitRead(status.keys,0) << "  " \
+         << bitRead(status.keys,1) << "  " \
+         << bitRead(status.keys,2) << "  " \
+         << bitRead(status.keys,3) << "  " \
+         << bitRead(status.keys,4) << "  " \
+         << bitRead(status.keys,5) << endl;
 
   Serial << endl;
   ++loop_counter;

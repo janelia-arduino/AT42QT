@@ -19,35 +19,18 @@ public:
     int8_t change_pin=-1,
     int8_t reset_pin=-1);
 
-  union DetectionStatus
+  union Status
   {
-    struct Fields
+    struct
     {
-      uint8_t any_keys : 6;
+      uint8_t keys : 6;
       uint8_t space : 1;
-      uint8_t calibrate : 1;
-    } fields;
-    uint8_t uint8;
+      uint8_t calibrating : 1;
+    };
+    uint8_t bytes;
   };
-  DetectionStatus getDetectionStatus();
-  bool anyKeyTouched();
+  Status getStatus();
   bool calibrating();
-
-  union KeyStatus
-  {
-    struct Fields
-    {
-      uint8_t key_0 : 1;
-      uint8_t key_1 : 1;
-      uint8_t key_2 : 1;
-      uint8_t key_3 : 1;
-      uint8_t key_4 : 1;
-      uint8_t key_5 : 1;
-      uint8_t space : 2;
-    } fields;
-    uint8_t uint8;
-  };
-  KeyStatus getKeyStatus();
 
   void triggerCalibration();
 
@@ -93,20 +76,6 @@ private:
     KEY4_REFERENCE = 60,
     KEY5_REFERENCE = 62
   };
-
-  template<typename T>
-  void write(RegisterAddresses register_address,
-    const T & data)
-  {
-    AT42QT::write(static_cast<uint8_t>(register_address),data);
-  }
-
-  template<typename T>
-  void read(RegisterAddresses register_address,
-    T & data)
-  {
-    AT42QT::read(static_cast<uint8_t>(register_address),data);
-  }
 
 };
 

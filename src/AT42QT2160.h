@@ -19,51 +19,21 @@ public:
     int8_t change_pin=-1,
     int8_t reset_pin=-1);
 
-  union GeneralStatus
+  union Status
   {
-    struct Fields
+    struct
     {
-      uint8_t slider : 1;
-      uint8_t common_change : 1;
-      uint8_t space : 4;
-      uint8_t cycle_overrun : 1;
-      uint8_t reset : 1;
-    } fields;
-    uint8_t uint8;
+      uint32_t slider : 1;
+      uint32_t common_change : 1;
+      uint32_t space0 : 4;
+      uint32_t cycle_overrun : 1;
+      uint32_t was_reset : 1;
+      uint32_t keys : 16;
+      uint32_t slider_position : 8;
+    };
+    uint32_t bytes;
   };
-  GeneralStatus getGeneralStatus();
-  bool sliderTouched();
-  bool commonChange();
-  bool cycleOverrun();
-  bool wasReset();
-
-  union KeyStatus
-  {
-    struct Fields
-    {
-      uint16_t key_0 : 1;
-      uint16_t key_1 : 1;
-      uint16_t key_2 : 1;
-      uint16_t key_3 : 1;
-      uint16_t key_4 : 1;
-      uint16_t key_5 : 1;
-      uint16_t key_6 : 1;
-      uint16_t key_7 : 1;
-      uint16_t key_8 : 1;
-      uint16_t key_9 : 1;
-      uint16_t key_10 : 1;
-      uint16_t key_11 : 1;
-      uint16_t key_12 : 1;
-      uint16_t key_13 : 1;
-      uint16_t key_14 : 1;
-      uint16_t key_15 : 1;
-    } fields;
-    uint16_t uint16;
-  };
-  KeyStatus getKeyStatus();
-  bool anyKeyTouched();
-
-  uint8_t getSliderPosition();
+  Status getStatus();
 
   void triggerCalibration();
 
@@ -179,20 +149,6 @@ private:
     KEY14_REFERENCE = 160,	
     KEY15_REFERENCE = 162,	
   };
-
-  template<typename T>
-  void write(RegisterAddresses register_address,
-    const T & data)
-  {
-    AT42QT::write(static_cast<uint8_t>(register_address),data);
-  }
-
-  template<typename T>
-  void read(RegisterAddresses register_address,
-    T & data)
-  {
-    AT42QT::read(static_cast<uint8_t>(register_address),data);
-  }
 
 };
 

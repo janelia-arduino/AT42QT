@@ -57,20 +57,20 @@ void loop()
 
   Serial << "status.any_key: " << status.any_key << endl;
 
-  Serial << "status.key_: " << endl;
+  Serial << "status.keys: " << _BIN(status.keys) << endl;
   Serial << "0  1  2  3  4  5  6  7  8  9 10 11" << endl;
-  Serial << status.key_0 << "  " \
-         << status.key_1 << "  " \
-         << status.key_2 << "  " \
-         << status.key_3 << "  " \
-         << status.key_4 << "  " \
-         << status.key_5 << "  " \
-         << status.key_6 << "  " \
-         << status.key_7 << "  " \
-         << status.key_8 << "  " \
-         << status.key_9 << "  " \
-         << status.key_10 << "  " \
-         << status.key_11 << endl;
+  Serial << bitRead(status.keys,0) << "  "      \
+         << bitRead(status.keys,1) << "  "      \
+         << bitRead(status.keys,2) << "  "      \
+         << bitRead(status.keys,3) << "  "      \
+         << bitRead(status.keys,4) << "  "      \
+         << bitRead(status.keys,5) << "  "      \
+         << bitRead(status.keys,6) << "  "      \
+         << bitRead(status.keys,7) << "  "      \
+         << bitRead(status.keys,8) << "  "      \
+         << bitRead(status.keys,9) << "  "      \
+         << bitRead(status.keys,10) << "  "     \
+         << bitRead(status.keys,11) << endl;
 
   Serial << "setMeasurementIntervalCount(2): " << endl;
   touch_sensor.setMeasurementIntervalCount(2);
