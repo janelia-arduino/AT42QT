@@ -58,25 +58,58 @@ void loop()
   Serial << "status.any_key: " << status.any_key << endl;
 
   Serial << "status.keys: " << _BIN(status.keys) << endl;
-  Serial << "0  1  2  3  4  5  6  7  8  9 10 11" << endl;
-  Serial << bitRead(status.keys,0) << "  "      \
-         << bitRead(status.keys,1) << "  "      \
-         << bitRead(status.keys,2) << "  "      \
-         << bitRead(status.keys,3) << "  "      \
-         << bitRead(status.keys,4) << "  "      \
-         << bitRead(status.keys,5) << "  "      \
-         << bitRead(status.keys,6) << "  "      \
-         << bitRead(status.keys,7) << "  "      \
-         << bitRead(status.keys,8) << "  "      \
-         << bitRead(status.keys,9) << "  "      \
-         << bitRead(status.keys,10) << "  "     \
-         << bitRead(status.keys,11) << endl;
+  for (uint8_t key=0; key < touch_sensor.KEY_COUNT; ++key)
+  {
+    if ((key != 0) && (key < 10))
+      Serial << "  ";
+    else if (key >= 10)
+      Serial << " ";
+    Serial << key;
+  }
+  Serial << endl;
+  for (uint8_t key=0; key < touch_sensor.KEY_COUNT; ++key)
+  {
+    if (key != 0)
+      Serial << "  ";
+    Serial << bitRead(status.keys,key);
+  }
+  Serial << endl;
 
-  Serial << "setMeasurementIntervalCount(2): " << endl;
-  touch_sensor.setMeasurementIntervalCount(2);
-
-  uint8_t interval_count = touch_sensor.getMeasurementIntervalCount();
+  uint8_t interval_count = 2;
+  Serial << "setMeasurementIntervalCount(" << interval_count << ")" << endl;
+  touch_sensor.setMeasurementIntervalCount(interval_count);
+  interval_count = touch_sensor.getMeasurementIntervalCount();
   Serial << "getMeasurementIntervalCount(): " << interval_count << endl;
+
+  uint8_t tdd = 21;
+  Serial << "setTowardsDriftDuration(" << tdd << ")" << endl;
+  touch_sensor.setTowardsDriftDuration(tdd);
+  tdd = touch_sensor.getTowardsDriftDuration();
+  Serial << "getTowardsDriftDuration(): " << tdd << endl;
+
+  uint8_t add = 8;
+  Serial << "setAwayDriftDuration(" << add << ")" << endl;
+  touch_sensor.setAwayDriftDuration(add);
+  add = touch_sensor.getAwayDriftDuration();
+  Serial << "getAwayDriftDuration(): " << add << endl;
+
+  uint8_t di = 5;
+  Serial << "setDetectionIntegrator(" << di << ")" << endl;
+  touch_sensor.setDetectionIntegrator(di);
+  di = touch_sensor.getDetectionIntegrator();
+  Serial << "getDetectionIntegrator(): " << di << endl;
+
+  uint8_t rd = 250;
+  Serial << "setRecalibrationDelay(" << rd << ")" << endl;
+  touch_sensor.setRecalibrationDelay(rd);
+  rd = touch_sensor.getRecalibrationDelay();
+  Serial << "getRecalibrationDelay(): " << rd << endl;
+
+  uint8_t dhd = 26;
+  Serial << "setDriftHoldDuration(" << dhd << ")" << endl;
+  touch_sensor.setDriftHoldDuration(dhd);
+  dhd = touch_sensor.getDriftHoldDuration();
+  Serial << "getDriftHoldDuration(): " << dhd << endl;
 
   Serial << endl;
   ++loop_counter;
