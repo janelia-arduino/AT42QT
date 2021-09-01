@@ -10,6 +10,7 @@
 #include <Wire.h>
 
 
+template<typename RegisterAddress>
 class AT42QT
 {
 public:
@@ -27,8 +28,10 @@ public:
   typedef void (*Callback)();
   void attachChangeCallback(const Callback callback);
 
+  void triggerCalibration();
+  void reset();
+
 private:
-  static const uint8_t REGISTER_ADDRESS_CHIP_ID = 0;
   const uint8_t device_address_;
   const uint8_t chip_id_;
   TwoWire * const wire_ptr_;
@@ -41,36 +44,13 @@ private:
 protected:
   static const uint8_t NONZERO_VALUE = 1;
 
-  template<typename RegisterAddress, typename Data>
+  template<typename Data>
   void write(RegisterAddress register_address,
-    const Data & data)
-  {
-    uint8_t byte_count = sizeof(data);
-    wire_ptr_->beginTransmission(device_address_);
-    wire_ptr_->write(static_cast<uint8_t>(register_address));
-    for (uint8_t byte_n=0; byte_n<byte_count; ++byte_n)
-    {
-      wire_ptr_->write((data >> (BITS_PER_BYTE * byte_n)) & BYTE_MAX);
-    }
-    wire_ptr_->endTransmission();
-  }
+    const Data & data);
 
-  template<typename RegisterAddress, typename Data>
+  template<typename Data>
   void read(RegisterAddress register_address,
-    Data & data)
-  {
-    uint8_t byte_count = sizeof(data);
-    wire_ptr_->beginTransmission(device_address_);
-    wire_ptr_->write(static_cast<uint8_t>(register_address));
-    wire_ptr_->endTransmission(false);
-
-    wire_ptr_->requestFrom(device_address_,byte_count);
-    data = 0;
-    for (uint8_t byte_n=0; byte_n<byte_count; ++byte_n)
-    {
-      data |= (wire_ptr_->read()) << (BITS_PER_BYTE * byte_n);
-    }
-  }
-  
+    Data & data);
 };
+#include "AT42QT/AT42QTDefinitions.h"
 #endif
