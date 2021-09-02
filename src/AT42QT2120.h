@@ -33,7 +33,7 @@ public:
   {
     struct
     {
-      uint32_t any_key : 1;
+      uint32_t any_key_touched : 1;
       uint32_t slider_or_wheel : 1;
       uint32_t space0 : 4;
       uint32_t overflow : 1;
@@ -52,6 +52,7 @@ public:
   // an interval_count of 4 equals 16ms*4=64ms between measurements
   // power down device by writing a zero interval_count
   // wake device by resetting or writing a nonzero interval_count
+  // longer intervals yield lower power consumption
   // default = 1
   uint8_t getMeasurementIntervalCount();
   void setMeasurementIntervalCount(uint8_t interval_count);

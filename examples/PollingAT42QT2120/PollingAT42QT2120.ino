@@ -75,7 +75,7 @@ void loop()
 
   AT42QT2120::Status status = touch_sensor.getStatus();
 
-  Serial << "status.any_key: " << status.any_key << endl;
+  Serial << "status.any_key_touched: " << status.any_key_touched << endl;
 
   Serial << "status.overflow: " << status.overflow << endl;
 

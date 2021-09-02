@@ -40,7 +40,7 @@ void setup()
 
   // change line is pulled low 85ms after reset
   // must read any device memory location to clear change line
-  touch_sensor.getDetectionStatus();
+  // touch_sensor.getStatus();
 
   touch_sensor.attachChangeCallback(changeLineActivated);
 
@@ -52,17 +52,11 @@ void loop()
   if (change_line_activated)
   {
     change_line_activated = false;
-    uint32_t status = touch_sensor.getStatus();
-    Serial << "status: " << _BIN(status) << endl;
-    // if (touch_sensor.anyKeyTouched())
-    // {
-    //   AT42QT2120::KeyStatus key_status = touch_sensor.getKeyStatus();
-    //   Serial << "key_status.uint16: " << _BIN(key_status.uint16) << endl;
-
-    //   uint8_t slider_position = touch_sensor.getSliderPosition();
-    //   Serial << "slider_position: " << slider_position << endl;
-
-
-    // }
+    AT42QT2120::Status status = touch_sensor.getStatus();
+    if (status.any_key_touched)
+    {
+      Serial << "status.keys: " << _BIN(status.keys) << endl;
+    }
   }
 }
+
