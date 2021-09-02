@@ -15,11 +15,17 @@ class AT42QT1060 : public AT42QT<RegisterAddresses::AT42QT1060>
 public:
   static const uint8_t DEVICE_ADDRESS = 0x12;
   static const uint8_t CHIP_ID = 0x31;
+  static const uint8_t KEY_COUNT = 6;
 
   AT42QT1060(TwoWire & wire=Wire,
     int8_t change_pin=-1,
     int8_t reset_pin=-1) :
-  AT42QT<RegisterAddresses::AT42QT1060>(DEVICE_ADDRESS,CHIP_ID,wire,change_pin,reset_pin)
+  AT42QT<RegisterAddresses::AT42QT1060>(DEVICE_ADDRESS,
+    CHIP_ID,
+    KEY_COUNT,
+    wire,
+    change_pin,
+    reset_pin)
   {
   }
 

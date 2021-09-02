@@ -18,10 +18,10 @@
 	
 	| Device     | Key Count Max | Completeness | Compiles | Tested on Hardware |
 	|------------+---------------+--------------+----------+--------------------|
-	| AT42QT1060 |             6 | Basic        | Yes      | No                 |
-	| AT42QT1070 |             7 | Basic        | Yes      | No                 |
-	| AT42QT2120 |            12 | Partial      | Yes      | Yes                |
-	| AT42WT2160 |   16 (Matrix) | Basic        | Yes      | No                 |
+	| AT42QT1060 |             6 | Partial      | Yes      | No                 |
+	| AT42QT1070 |             7 | Partial      | Yes      | No                 |
+	| AT42QT2120 |            12 | Complete     | Yes      | Yes                |
+	| AT42WT2160 |   16 (Matrix) | Partial      | Yes      | No                 |
 
 * Library Examples
 

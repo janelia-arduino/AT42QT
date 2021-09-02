@@ -11,6 +11,6 @@
 AT42QT2160::Status AT42QT2160::getStatus()
 {
   Status status;
-  read(RegisterAddresses::AT42QT2160::GENERAL_STATUS,status.bytes);
+  read(RegisterAddresses::AT42QT2160::STATUS,status.bytes);
   return status;
 }

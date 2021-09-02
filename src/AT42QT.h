@@ -16,6 +16,7 @@ class AT42QT
 public:
   AT42QT(uint8_t device_address,
     uint8_t chip_id,
+    uint8_t key_count,
     TwoWire & wire=Wire,
     int8_t change_pin=-1,
     int8_t reset_pin=-1);
@@ -34,6 +35,7 @@ public:
 private:
   const uint8_t device_address_;
   const uint8_t chip_id_;
+  const uint8_t key_count_;
   TwoWire * const wire_ptr_;
   const int8_t change_pin_;
   const int8_t reset_pin_;
@@ -54,6 +56,11 @@ protected:
     uint8_t data_size);
 
   template<typename Data>
+  void writeKey(RegisterAddress base_register_address,
+    uint8_t key,
+    const Data & data);
+
+  template<typename Data>
   void read(RegisterAddress register_address,
     Data & data);
 
@@ -61,6 +68,26 @@ protected:
   void read(RegisterAddress register_address,
     Data & data,
     uint8_t data_size);
+
+  template<typename Data>
+  void readKey(RegisterAddress base_register_address,
+    uint8_t key,
+    Data & data);
+
+private:
+  uint8_t verifyKey(uint8_t key);
+  
+  template<typename Data>
+  void writeRegisterBlock(uint8_t register_address_number,
+    const Data & data,
+    uint8_t data_size);
+
+  template<typename Data>
+  void readRegisterBlock(uint8_t register_address_number,
+    Data & data,
+    uint8_t data_size);
+
+
 };
 #include "AT42QT/AT42QTDefinitions.h"
 #endif

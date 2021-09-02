@@ -12,6 +12,26 @@ AT42QT2160 touch_sensor;
 
 unsigned long loop_counter;
 
+void printKeyStatus(uint16_t keys, uint8_t key_count)
+{
+  for (uint8_t key=0; key < key_count; ++key)
+  {
+    if ((key != 0) && (key < 10))
+      Serial << "  ";
+    else if (key >= 10)
+      Serial << " ";
+    Serial << key;
+  }
+  Serial << endl;
+  for (uint8_t key=0; key < key_count; ++key)
+  {
+    if (key != 0)
+      Serial << "  ";
+    Serial << bitRead(keys,key);
+  }
+  Serial << endl;
+}
+
 void setup()
 {
   Serial.begin(BAUD);
@@ -51,23 +71,8 @@ void loop()
   AT42QT2160::Status status = touch_sensor.getStatus();
 
   Serial << "status.keys: " << _BIN(status.keys) << endl;
-  Serial << "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15" << endl;
-  Serial << bitRead(status.keys,0) << "  "      \
-         << bitRead(status.keys,1) << "  "      \
-         << bitRead(status.keys,2) << "  "      \
-         << bitRead(status.keys,3) << "  "      \
-         << bitRead(status.keys,4) << "  "      \
-         << bitRead(status.keys,5) << "  "      \
-         << bitRead(status.keys,6) << "  "      \
-         << bitRead(status.keys,7) << "  "      \
-         << bitRead(status.keys,8) << "  "      \
-         << bitRead(status.keys,9) << "  "      \
-         << bitRead(status.keys,10) << "  "     \
-         << bitRead(status.keys,11) << "  "     \
-         << bitRead(status.keys,12) << "  "     \
-         << bitRead(status.keys,13) << "  "     \
-         << bitRead(status.keys,14) << "  "     \
-         << bitRead(status.keys,15) << endl;
+
+  printKeyStatus(status.keys,touch_sensor.KEY_COUNT);
 
   Serial << endl;
   ++loop_counter;
