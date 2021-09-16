@@ -2,7 +2,7 @@
 // AT42QT1070.h
 //
 // Authors:
-// Peter Polidoro peterpolidoro@gmail.com
+// Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
 #ifndef AT42QT1070_H
 #define AT42QT1070_H

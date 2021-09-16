@@ -2,7 +2,7 @@
 // AT42QT2160.h
 //
 // Authors:
-// Peter Polidoro peterpolidoro@gmail.com
+// Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
 #ifndef AT42QT2160_H
 #define AT42QT2160_H

@@ -2,7 +2,7 @@
 // RegisterAddresses.h
 //
 // Authors:
-// Peter Polidoro peterpolidoro@gmail.com
+// Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
 #ifndef REGISTER_ADDRESSES_H
 #define REGISTER_ADDRESSES_H
