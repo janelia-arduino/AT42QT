@@ -27,7 +27,7 @@ void printKeyStatus(uint16_t keys, uint8_t key_count)
   {
     if (key != 0)
       Serial << "  ";
-    Serial << bitRead(keys,key);
+    Serial << touch_sensor.keyTouchedGivenKeys(key,keys);
   }
   Serial << endl;
 }

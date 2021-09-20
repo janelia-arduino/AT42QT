@@ -32,6 +32,9 @@ public:
   void triggerCalibration();
   void reset();
 
+  bool keyTouchedGivenKeys(uint8_t key,
+    uint16_t keys);
+
 private:
   const uint8_t device_address_;
   const uint8_t chip_id_;
