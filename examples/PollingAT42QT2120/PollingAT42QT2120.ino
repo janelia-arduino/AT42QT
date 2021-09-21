@@ -12,7 +12,7 @@ AT42QT2120 touch_sensor;
 
 unsigned long loop_counter;
 
-void printKeyStatus(uint16_t keys, uint8_t key_count)
+void printKeyStatus(AT42QT2120::Status status, uint8_t key_count)
 {
   for (uint8_t key=0; key < key_count; ++key)
   {
@@ -27,7 +27,7 @@ void printKeyStatus(uint16_t keys, uint8_t key_count)
   {
     if (key != 0)
       Serial << "  ";
-    Serial << touch_sensor.keyTouchedGivenKeys(key,keys);
+    Serial << touch_sensor.touched(status,key);
   }
   Serial << endl;
 }
@@ -75,13 +75,13 @@ void loop()
 
   AT42QT2120::Status status = touch_sensor.getStatus();
 
-  Serial << "status.any_key_touched: " << status.any_key_touched << endl;
+  Serial << "status.anyTouched(): " << touch_sensor.anyTouched(status) << endl;
 
   Serial << "status.overflow: " << status.overflow << endl;
 
   Serial << "status.keys: " << _BIN(status.keys) << endl;
 
-  printKeyStatus(status.keys,touch_sensor.KEY_COUNT);
+  printKeyStatus(status,touch_sensor.KEY_COUNT);
 
   uint8_t interval_count = 2;
   Serial << "setMeasurementIntervalCount(" << interval_count << ")" << endl;

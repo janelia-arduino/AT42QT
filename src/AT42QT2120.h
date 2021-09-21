@@ -48,6 +48,10 @@ public:
   Status getStatus();
   bool calibrating();
 
+  bool anyTouched(Status status);
+  bool touched(Status status,
+    uint8_t key);
+
   // each interval is 16ms
   // an interval_count of 4 equals 16ms*4=64ms between measurements
   // power down device by writing a zero interval_count

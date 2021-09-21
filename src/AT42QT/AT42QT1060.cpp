@@ -21,6 +21,17 @@ bool AT42QT1060::calibrating()
   return status.calibrating;
 }
 
+bool AT42QT1060::anyTouched(Status status)
+{
+  return status.keys;
+}
+
+bool AT42QT1060::touched(Status status,
+  uint8_t key)
+{
+  return bitRead(status.keys,key);
+}
+
 void AT42QT1060::enableRelativeDriftCompensation()
 {
   write(RegisterAddresses::AT42QT1060::DRIFT_OPTION,ENABLE_RELATIVE_DRIFT_COMPENSATION);

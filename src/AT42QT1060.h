@@ -45,6 +45,10 @@ public:
   Status getStatus();
   bool calibrating();
 
+  bool anyTouched(Status status);
+  bool touched(Status status,
+    uint8_t key);
+
   static const uint8_t ENABLE_RELATIVE_DRIFT_COMPENSATION = 0;
   static const uint8_t DISABLE_RELATIVE_DRIFT_COMPENSATION = 1;
   // default = disabled

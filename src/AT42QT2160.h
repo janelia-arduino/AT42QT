@@ -47,6 +47,11 @@ public:
   };
   static const uint8_t STATUS_SIZE = 5;
   Status getStatus();
+
+  bool anyTouched(Status status);
+  bool touched(Status status,
+    uint8_t key);
+
 };
 
 #endif

@@ -38,10 +38,6 @@ void setup()
   }
   Serial << "finished calibrating" << endl;
 
-  // change line is pulled low 85ms after reset
-  // must read any device memory location to clear change line
-  // touch_sensor.getStatus();
-
   touch_sensor.attachChangeCallback(changeLineActivated);
 
   Serial << "waiting for touch..." << endl;
@@ -53,7 +49,7 @@ void loop()
   {
     change_line_activated = false;
     AT42QT2120::Status status = touch_sensor.getStatus();
-    if (status.any_key_touched)
+    if (touch_sensor.anyTouched(status))
     {
       Serial << "status.keys: " << _BIN(status.keys) << endl;
     }

@@ -12,7 +12,7 @@ AT42QT1060 touch_sensor;
 
 unsigned long loop_counter;
 
-void printKeyStatus(uint16_t keys, uint8_t key_count)
+void printKeyStatus(AT42QT1060::Status status, uint8_t key_count)
 {
   for (uint8_t key=0; key < key_count; ++key)
   {
@@ -27,7 +27,7 @@ void printKeyStatus(uint16_t keys, uint8_t key_count)
   {
     if (key != 0)
       Serial << "  ";
-    Serial << bitRead(keys,key);
+    Serial << touch_sensor.touched(status,key);
   }
   Serial << endl;
 }
@@ -77,7 +77,7 @@ void loop()
 
   Serial << "status.keys: " << _BIN(status.keys) << endl;
 
-  printKeyStatus(status.keys,touch_sensor.KEY_COUNT);
+  printKeyStatus(status,touch_sensor.KEY_COUNT);
 
   Serial << endl;
   ++loop_counter;

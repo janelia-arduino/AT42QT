@@ -14,3 +14,14 @@ AT42QT2160::Status AT42QT2160::getStatus()
   read(RegisterAddresses::AT42QT2160::STATUS,status.bytes);
   return status;
 }
+
+bool AT42QT2160::anyTouched(Status status)
+{
+  return status.keys;
+}
+
+bool AT42QT2160::touched(Status status,
+  uint8_t key)
+{
+  return bitRead(status.keys,key);
+}

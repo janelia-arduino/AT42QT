@@ -21,6 +21,17 @@ bool AT42QT2120::calibrating()
   return status.calibrating;
 }
 
+bool AT42QT2120::anyTouched(Status status)
+{
+  return status.keys;
+}
+
+bool AT42QT2120::touched(Status status,
+  uint8_t key)
+{
+  return bitRead(status.keys,key);
+}
+
 uint8_t AT42QT2120::getMeasurementIntervalCount()
 {
   uint8_t interval_count;

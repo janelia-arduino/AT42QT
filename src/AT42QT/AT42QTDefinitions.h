@@ -88,13 +88,6 @@ void AT42QT<RegisterAddress>::reset()
 }
 
 template<typename RegisterAddress>
-bool AT42QT<RegisterAddress>::keyTouchedGivenKeys(uint8_t key,
-  uint16_t keys)
-{
-  return bitRead(keys,key);
-}
-
-template<typename RegisterAddress>
 template<typename Data>
 void AT42QT<RegisterAddress>::write(RegisterAddress register_address,
   const Data & data)
