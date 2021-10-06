@@ -7,6 +7,7 @@
 // ----------------------------------------------------------------------------
 #ifndef AT42QT_H
 #define AT42QT_H
+#include <Arduino.h>
 #include <Wire.h>
 
 
@@ -76,7 +77,7 @@ protected:
 
 private:
   uint8_t verifyKey(uint8_t key);
-  
+
   template<typename Data>
   void writeRegisterBlock(uint8_t register_address_number,
     const Data & data,

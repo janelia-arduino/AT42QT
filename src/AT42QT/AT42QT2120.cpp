@@ -211,4 +211,3 @@ uint16_t AT42QT2120::getKeyReference(uint8_t key)
   readKey(RegisterAddresses::AT42QT2120::KEY_REFERENCE,key,reference);
   return reference;
 }
-

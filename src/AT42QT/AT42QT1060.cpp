@@ -138,4 +138,3 @@ void AT42QT1060::setDetectionMask(DetectionMask mask)
 {
   write(RegisterAddresses::AT42QT1060::DETECTION_MASK,mask.bytes);
 }
-

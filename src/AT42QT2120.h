@@ -108,7 +108,7 @@ public:
   void disableSliderAndWheel();
   void enableSlider();
   void enableWheel();
-  
+
   // prolongs the charge-transfer period of signal acquisition
   // allows full charge-transfer for keys with heavy Rs/Cx loading
   // increments of 1us
