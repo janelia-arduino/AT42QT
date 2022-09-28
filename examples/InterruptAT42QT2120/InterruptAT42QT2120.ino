@@ -1,6 +1,5 @@
 #include <AT42QT2120.h>
 #include <Wire.h>
-#include <Streaming.h>
 
 
 const long BAUD = 115200;
@@ -24,23 +23,23 @@ void setup()
 
   touch_sensor.begin();
 
-  Serial << "reseting..." << endl;
+  Serial.println("reseting...");
   touch_sensor.reset();
   delay(RESET_DELAY);
 
-  Serial << "triggerCalibration" << endl;
+  Serial.println("triggerCalibration");
   touch_sensor.triggerCalibration();
   delay(CALIBRATION_LOOP_DELAY);
   while (touch_sensor.calibrating())
   {
-    Serial << "calibrating..." << endl;
+    Serial.println("calibrating...");
     delay(CALIBRATION_LOOP_DELAY);
   }
-  Serial << "finished calibrating" << endl;
+  Serial.println("finished calibrating");
 
   touch_sensor.attachChangeCallback(changeLineActivated);
 
-  Serial << "waiting for touch..." << endl;
+  Serial.println("waiting for touch...");
 }
 
 void loop()
@@ -51,7 +50,8 @@ void loop()
     AT42QT2120::Status status = touch_sensor.getStatus();
     if (touch_sensor.anyTouched(status))
     {
-      Serial << "status.keys: " << _BIN(status.keys) << endl;
+      Serial.print("status.keys: ");
+      Serial.println(status.keys, BIN);
     }
   }
 }

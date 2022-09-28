@@ -1,6 +1,5 @@
 #include <AT42QT1060.h>
 #include <AT42QT2120.h>
-#include <Streaming.h>
 
 
 const long BAUD = 115200;
@@ -19,9 +18,11 @@ void setup()
 
 void loop()
 {
-  Serial << "touch_sensor_0.DEVICE_ADDRESS: " << _HEX(touch_sensor_0.DEVICE_ADDRESS) << endl;
-  Serial << "touch_sensor_1.DEVICE_ADDRESS: " << _HEX(touch_sensor_1.DEVICE_ADDRESS) << endl;
+  Serial.print("touch_sensor_0.DEVICE_ADDRESS: ");
+  Serial.println(touch_sensor_0.DEVICE_ADDRESS, HEX);
+  Serial.print("touch_sensor_1.DEVICE_ADDRESS: ");
+  Serial.println(touch_sensor_1.DEVICE_ADDRESS, HEX);
 
-  Serial << endl;
+  Serial.println();
   delay(LOOP_DELAY);
 }

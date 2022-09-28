@@ -1,5 +1,4 @@
 #include <AT42QT2160.h>
-#include <Streaming.h>
 
 
 const long BAUD = 115200;
@@ -17,19 +16,19 @@ void printKeyStatus(AT42QT2160::Status status, uint8_t key_count)
   for (uint8_t key=0; key < key_count; ++key)
   {
     if ((key != 0) && (key < 10))
-      Serial << "  ";
+      Serial.print("  ");
     else if (key >= 10)
-      Serial << " ";
-    Serial << key;
+      Serial.print(" ");
+    Serial.print(key);
   }
-  Serial << endl;
+  Serial.println();
   for (uint8_t key=0; key < key_count; ++key)
   {
     if (key != 0)
-      Serial << "  ";
-    Serial << touch_sensor.touched(status,key);
+      Serial.print("  ");
+    Serial.print(touch_sensor.touched(status,key));
   }
-  Serial << endl;
+  Serial.println();
 }
 
 void setup()
@@ -43,15 +42,15 @@ void setup()
     return;
   }
 
-  Serial << "reseting..." << endl;
+  Serial.println("reseting...");
   touch_sensor.reset();
   delay(RESET_DELAY);
 
-  Serial << "triggerCalibration" << endl;
+  Serial.println("triggerCalibration");
   touch_sensor.triggerCalibration();
   delay(CALIBRATION_DELAY);
-  Serial << "finished calibrating" << endl;
-  
+  Serial.println("finished calibrating");
+
   loop_counter = 0;
 }
 
@@ -61,19 +60,22 @@ void loop()
 
   if (!touch_sensor.communicating())
   {
-    Serial << "Not communicating! Is chip connected and powered properly?" << endl;
+    Serial.print("Not communicating! Is chip connected and powered properly?");
     return;
   }
 
   uint8_t chip_id = touch_sensor.getChipId();
-  Serial << "chip_id: " << _HEX(chip_id) << endl;
+  Serial.print("chip_id: ");
+  Serial.println(chip_id, HEX);
 
   AT42QT2160::Status status = touch_sensor.getStatus();
+  uint16_t keys = status.keys;
 
-  Serial << "status.keys: " << _BIN(status.keys) << endl;
+  Serial.print("status.keys: ");
+  Serial.println(keys, BIN);
 
   printKeyStatus(status,touch_sensor.KEY_COUNT);
 
-  Serial << endl;
+  Serial.println();
   ++loop_counter;
 }
