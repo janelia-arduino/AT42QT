@@ -31,7 +31,7 @@ public:
 
   union Status
   {
-    struct
+    struct __attribute__((__packed__))
     {
       uint32_t any_key_touched : 1;
       uint32_t slider_or_wheel : 1;
