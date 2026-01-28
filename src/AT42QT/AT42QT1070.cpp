@@ -7,27 +7,29 @@
 // ----------------------------------------------------------------------------
 #include "../AT42QT1070.h"
 
-
-AT42QT1070::Status AT42QT1070::getStatus()
+AT42QT1070::Status
+AT42QT1070::getStatus ()
 {
   Status status;
-  read(RegisterAddresses::AT42QT1070::STATUS,status.bytes,STATUS_SIZE);
+  read (RegisterAddresses::AT42QT1070::STATUS, status.bytes, STATUS_SIZE);
   return status;
 }
 
-bool AT42QT1070::calibrating()
+bool
+AT42QT1070::calibrating ()
 {
-  Status status = getStatus();
+  Status status = getStatus ();
   return status.calibrating;
 }
 
-bool AT42QT1070::anyTouched(Status status)
+bool
+AT42QT1070::anyTouched (Status status)
 {
   return status.keys;
 }
 
-bool AT42QT1070::touched(Status status,
-  uint8_t key)
+bool
+AT42QT1070::touched (Status status, uint8_t key)
 {
-  return bitRead(status.keys,key);
+  return bitRead (status.keys, key);
 }

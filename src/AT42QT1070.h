@@ -9,7 +9,6 @@
 #include "AT42QT.h"
 #include "AT42QT/RegisterAddresses.h"
 
-
 class AT42QT1070 : public AT42QT<RegisterAddresses::AT42QT1070>
 {
 public:
@@ -17,18 +16,12 @@ public:
   static const uint8_t CHIP_ID = 0x2E;
   static const uint8_t KEY_COUNT = 7;
 
-  AT42QT1070(TwoWire & wire=Wire,
-    int8_t change_pin=-1,
-    int8_t reset_pin=-1) :
-  AT42QT<RegisterAddresses::AT42QT1070>(DEVICE_ADDRESS,
-    CHIP_ID,
-    KEY_COUNT,
-    wire,
-    change_pin,
-    reset_pin)
+  AT42QT1070 (TwoWire &wire = Wire, int8_t change_pin = -1,
+              int8_t reset_pin = -1)
+      : AT42QT<RegisterAddresses::AT42QT1070> (
+            DEVICE_ADDRESS, CHIP_ID, KEY_COUNT, wire, change_pin, reset_pin)
   {
   }
-
 
   union Status
   {
@@ -44,12 +37,11 @@ public:
     uint16_t bytes;
   };
   static const uint8_t STATUS_SIZE = 2;
-  Status getStatus();
-  bool calibrating();
+  Status getStatus ();
+  bool calibrating ();
 
-  bool anyTouched(Status status);
-  bool touched(Status status,
-    uint8_t key);
+  bool anyTouched (Status status);
+  bool touched (Status status, uint8_t key);
 
 private:
 };
