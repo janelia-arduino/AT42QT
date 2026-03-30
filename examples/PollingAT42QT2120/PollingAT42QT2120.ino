@@ -1,6 +1,5 @@
 #include <AT42QT2120.h>
 
-
 const long BAUD = 115200;
 const int RESET_DELAY = 2000;
 const int CALIBRATION_LOOP_DELAY = 50;
@@ -11,10 +10,8 @@ AT42QT2120 touch_sensor;
 
 unsigned long loop_counter;
 
-void printKeyStatus(AT42QT2120::Status status, uint8_t key_count)
-{
-  for (uint8_t key=0; key < key_count; ++key)
-  {
+void printKeyStatus(AT42QT2120::Status status, uint8_t key_count) {
+  for (uint8_t key = 0; key < key_count; ++key) {
     if ((key != 0) && (key < 10))
       Serial.print("  ");
     else if (key >= 10)
@@ -22,23 +19,21 @@ void printKeyStatus(AT42QT2120::Status status, uint8_t key_count)
     Serial.print(key);
   }
   Serial.println();
-  for (uint8_t key=0; key < key_count; ++key)
-  {
+  for (uint8_t key = 0; key < key_count; ++key) {
     if (key != 0)
       Serial.print("  ");
-    Serial.print(touch_sensor.touched(status,key));
+    Serial.print(touch_sensor.touched(status, key));
   }
   Serial.println();
 }
 
-void setup()
-{
+void setup() {
   Serial.begin(BAUD);
 
-  touch_sensor.begin();
+  Wire.begin();
+  touch_sensor.setup(Wire);
 
-  if (!touch_sensor.communicating())
-  {
+  if (!touch_sensor.communicating()) {
     return;
   }
 
@@ -49,8 +44,7 @@ void setup()
   Serial.println("triggerCalibration");
   touch_sensor.triggerCalibration();
   delay(CALIBRATION_LOOP_DELAY);
-  while (touch_sensor.calibrating())
-  {
+  while (touch_sensor.calibrating()) {
     Serial.println("calibrating...");
     delay(CALIBRATION_LOOP_DELAY);
   }
@@ -59,13 +53,12 @@ void setup()
   loop_counter = 0;
 }
 
-void loop()
-{
+void loop() {
   delay(LOOP_DELAY);
 
-  if (!touch_sensor.communicating())
-  {
-    Serial.println("Not communicating! Is chip connected and powered properly?");
+  if (!touch_sensor.communicating()) {
+    Serial.println(
+        "Not communicating! Is chip connected and powered properly?");
     return;
   }
 
@@ -84,7 +77,7 @@ void loop()
   Serial.print("status.keys: ");
   Serial.println(status.keys, BIN);
 
-  printKeyStatus(status,touch_sensor.KEY_COUNT);
+  printKeyStatus(status, touch_sensor.KEY_COUNT);
 
   uint8_t interval_count = 2;
   Serial.print("setMeasurementIntervalCount(");
@@ -103,7 +96,8 @@ void loop()
   tdcd = touch_sensor.getTowardsDriftCompensationDuration();
   Serial.print("getTowardsDriftCompensationDuration(): ");
   Serial.print(tdcd);
-  Serial.println();;
+  Serial.println();
+  ;
 
   uint8_t adcd = 8;
   Serial.print("setAwayDriftCompensationDuration(");
@@ -163,7 +157,7 @@ void loop()
   Serial.print(",");
   Serial.print(threshold);
   Serial.println(")");
-  touch_sensor.setKeyDetectThreshold(key,threshold);
+  touch_sensor.setKeyDetectThreshold(key, threshold);
   threshold = touch_sensor.getKeyDetectThreshold(key);
   Serial.print("getKeyDetectThreshold(");
   Serial.print(key);
@@ -173,14 +167,14 @@ void loop()
   key = 5;
   AT42QT2120::KeyControl key_control;
   uint8_t aksg = 2;
-  key_control.adjacent_key_suppression_group = aksg;
+  key_control.setAdjacentKeySuppressionGroup(aksg);
   Serial.print("setKeyControl: key = ");
   Serial.print(key);
   Serial.print(", adjacent_key_suppression_group = ");
   Serial.println(aksg);
-  touch_sensor.setKeyControl(key,key_control);
+  touch_sensor.setKeyControl(key, key_control);
   key_control = touch_sensor.getKeyControl(key);
-  aksg = key_control.adjacent_key_suppression_group;
+  aksg = key_control.adjacentKeySuppressionGroup();
   Serial.print("getKeyControl: key = ");
   Serial.print(key);
   Serial.print(", adjacent_key_suppression_group = ");
@@ -198,7 +192,7 @@ void loop()
   Serial.print(pulse);
   Serial.print(", scale = ");
   Serial.println(scale);
-  touch_sensor.setKeyPulseScale(key,key_pulse_scale);
+  touch_sensor.setKeyPulseScale(key, key_pulse_scale);
   key_pulse_scale = touch_sensor.getKeyPulseScale(key);
   pulse = key_pulse_scale.pulse;
   scale = key_pulse_scale.scale;
@@ -218,7 +212,7 @@ void loop()
   Serial.print(pulse);
   Serial.print(", scale = ");
   Serial.println(scale);
-  touch_sensor.setKeyPulseScale(key,key_pulse_scale);
+  touch_sensor.setKeyPulseScale(key, key_pulse_scale);
 
   key = 8;
   uint16_t signal = touch_sensor.getKeySignal(key);

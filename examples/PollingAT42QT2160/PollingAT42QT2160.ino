@@ -1,6 +1,5 @@
 #include <AT42QT2160.h>
 
-
 const long BAUD = 115200;
 const int RESET_DELAY = 2000;
 const int CALIBRATION_DELAY = 2000;
@@ -11,10 +10,8 @@ AT42QT2160 touch_sensor;
 
 unsigned long loop_counter;
 
-void printKeyStatus(AT42QT2160::Status status, uint8_t key_count)
-{
-  for (uint8_t key=0; key < key_count; ++key)
-  {
+void printKeyStatus(AT42QT2160::Status status, uint8_t key_count) {
+  for (uint8_t key = 0; key < key_count; ++key) {
     if ((key != 0) && (key < 10))
       Serial.print("  ");
     else if (key >= 10)
@@ -22,23 +19,21 @@ void printKeyStatus(AT42QT2160::Status status, uint8_t key_count)
     Serial.print(key);
   }
   Serial.println();
-  for (uint8_t key=0; key < key_count; ++key)
-  {
+  for (uint8_t key = 0; key < key_count; ++key) {
     if (key != 0)
       Serial.print("  ");
-    Serial.print(touch_sensor.touched(status,key));
+    Serial.print(touch_sensor.touched(status, key));
   }
   Serial.println();
 }
 
-void setup()
-{
+void setup() {
   Serial.begin(BAUD);
 
-  touch_sensor.begin();
+  Wire.begin();
+  touch_sensor.setup(Wire);
 
-  if (!touch_sensor.communicating())
-  {
+  if (!touch_sensor.communicating()) {
     return;
   }
 
@@ -54,12 +49,10 @@ void setup()
   loop_counter = 0;
 }
 
-void loop()
-{
+void loop() {
   delay(LOOP_DELAY);
 
-  if (!touch_sensor.communicating())
-  {
+  if (!touch_sensor.communicating()) {
     Serial.print("Not communicating! Is chip connected and powered properly?");
     return;
   }
@@ -74,7 +67,7 @@ void loop()
   Serial.print("status.keys: ");
   Serial.println(keys, BIN);
 
-  printKeyStatus(status,touch_sensor.KEY_COUNT);
+  printKeyStatus(status, touch_sensor.KEY_COUNT);
 
   Serial.println();
   ++loop_counter;

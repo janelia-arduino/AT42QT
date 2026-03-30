@@ -4,154 +4,137 @@
 // Authors:
 // Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
+
 #ifndef AT42QT2120_H
 #define AT42QT2120_H
+
 #include "AT42QT.h"
 #include "AT42QT/RegisterAddresses.h"
 
-
-class AT42QT2120 : public AT42QT<RegisterAddresses::AT42QT2120>
-{
+class AT42QT2120 : public AT42QT<RegisterAddresses::AT42QT2120> {
 public:
-  static const uint8_t DEVICE_ADDRESS = 0x1C;
-  static const uint8_t CHIP_ID = 0x3E;
-  static const uint8_t KEY_COUNT = 12;
+  static constexpr uint8_t DEVICE_ADDRESS = 0x1C;
+  static constexpr uint8_t CHIP_ID = 0x3E;
+  static constexpr uint8_t KEY_COUNT = 12;
 
-  AT42QT2120(TwoWire & wire=Wire,
-    int8_t change_pin=-1,
-    int8_t reset_pin=-1) :
-  AT42QT<RegisterAddresses::AT42QT2120>(DEVICE_ADDRESS,
-    CHIP_ID,
-    KEY_COUNT,
-    wire,
-    change_pin,
-    reset_pin)
-  {
-  }
+  AT42QT2120(TwoWire &wire = Wire, int8_t change_pin = -1,
+             int8_t reset_pin = -1)
+      : AT42QT<RegisterAddresses::AT42QT2120>(
+            DEVICE_ADDRESS, CHIP_ID, KEY_COUNT, wire, change_pin, reset_pin) {}
 
-  union Status
-  {
-    struct __attribute__((__packed__))
-    {
-      uint32_t any_key_touched : 1;
-      uint32_t slider_or_wheel : 1;
-      uint32_t space0 : 4;
-      uint32_t overflow : 1;
-      uint32_t calibrating : 1;
-      uint32_t keys: 12;
-      uint32_t space1 : 4;
-      uint32_t slider_or_wheel_position : 8;
-    };
-    uint32_t bytes;
+  struct Status {
+    uint32_t bytes{0};
+    bool any_key_touched{false};
+    bool slider_or_wheel{false};
+    bool overflow{false};
+    bool calibrating{false};
+    uint16_t keys{0};
+    uint8_t slider_or_wheel_position{0};
   };
-  static const uint8_t STATUS_SIZE = 4;
+  static constexpr uint8_t STATUS_SIZE = 4;
+
+  struct SliderOrWheelEnable {
+    uint8_t bytes{0};
+    at42qt::bits::BitRef<uint8_t, 6> wheel;
+    at42qt::bits::BitRef<uint8_t, 7> enable;
+
+    SliderOrWheelEnable() : wheel(bytes), enable(bytes) {}
+    explicit SliderOrWheelEnable(uint8_t raw)
+        : bytes(raw), wheel(bytes), enable(bytes) {}
+    SliderOrWheelEnable(const SliderOrWheelEnable &other)
+        : bytes(other.bytes), wheel(bytes), enable(bytes) {}
+    SliderOrWheelEnable &operator=(const SliderOrWheelEnable &other) {
+      bytes = other.bytes;
+      return *this;
+    }
+  };
+
+  struct KeyControl {
+    uint8_t bytes{0};
+
+    bool touchEnabled() const { return (bytes & 0x01u) == 0; }
+    void setTouchEnabled(bool enabled) {
+      if (enabled) {
+        bytes &= static_cast<uint8_t>(~0x01u);
+      } else {
+        bytes |= 0x01u;
+      }
+    }
+
+    bool outputHigh() const { return (bytes & 0x02u) != 0; }
+    void setOutputHigh(bool high) {
+      if (high) {
+        bytes |= 0x02u;
+      } else {
+        bytes &= static_cast<uint8_t>(~0x02u);
+      }
+    }
+
+    uint8_t adjacentKeySuppressionGroup() const {
+      return static_cast<uint8_t>((bytes >> 2) & 0x03u);
+    }
+    void setAdjacentKeySuppressionGroup(uint8_t group) {
+      bytes = static_cast<uint8_t>((bytes & ~0x0Cu) | ((group & 0x03u) << 2));
+    }
+
+    bool guardEnabled() const { return (bytes & 0x10u) != 0; }
+    void setGuardEnabled(bool enabled) {
+      if (enabled) {
+        bytes |= 0x10u;
+      } else {
+        bytes &= static_cast<uint8_t>(~0x10u);
+      }
+    }
+  };
+
+  struct KeyPulseScale {
+    uint8_t bytes{0};
+    at42qt::bits::FieldRef<uint8_t, 0, 4> scale;
+    at42qt::bits::FieldRef<uint8_t, 4, 4> pulse;
+
+    KeyPulseScale() : scale(bytes), pulse(bytes) {}
+    explicit KeyPulseScale(uint8_t raw)
+        : bytes(raw), scale(bytes), pulse(bytes) {}
+    KeyPulseScale(const KeyPulseScale &other)
+        : bytes(other.bytes), scale(bytes), pulse(bytes) {}
+    KeyPulseScale &operator=(const KeyPulseScale &other) {
+      bytes = other.bytes;
+      return *this;
+    }
+  };
+
+  static constexpr uint8_t DRIFT_COMPENSATION_DURATION_MAX = 127;
+  static constexpr uint8_t DETECTION_INTEGRATOR_MAX = 32;
+
   Status getStatus();
   bool calibrating();
-
   bool anyTouched(Status status);
-  bool touched(Status status,
-    uint8_t key);
+  bool touched(Status status, uint8_t key);
 
-  // each interval is 16ms
-  // an interval_count of 4 equals 16ms*4=64ms between measurements
-  // power down device by writing a zero interval_count
-  // wake device by resetting or writing a nonzero interval_count
-  // longer intervals yield lower power consumption
-  // default = 1
   uint8_t getMeasurementIntervalCount();
   void setMeasurementIntervalCount(uint8_t interval_count);
-
-  // increments of 0.16s
-  // should be more than four times the measurement interval count
-  // default = 20
-  static const uint8_t DRIFT_COMPENSATION_DURATION_MAX = 127;
   uint8_t getTowardsDriftCompensationDuration();
-  void setTowardsDriftCompensationDuration(uint8_t tdd);
-
-  // increments of 0.16s
-  // should be more than four times the measurement interval count
-  // default = 5
+  void setTowardsDriftCompensationDuration(uint8_t tdcd);
   uint8_t getAwayDriftCompensationDuration();
-  void setAwayDriftCompensationDuration(uint8_t add);
-
-  // number of consecutive measurements that must be confirmed as having passed
-  // the key threshold value before that key is registered as being in detect
-  // default = 4
-  static const uint8_t DETECTION_INTEGRATOR_MAX = 32;
+  void setAwayDriftCompensationDuration(uint8_t adcd);
   uint8_t getDetectionIntegrator();
   void setDetectionIntegrator(uint8_t di);
-
-  // increments of 0.16s
-  // automatic recalibration delay after extended unintentional touch
-  // default = 255
   uint8_t getRecalibrationDelay();
   void setRecalibrationDelay(uint8_t rd);
-
-  // increments of 0.16s
-  // default = 25
   uint8_t getDriftCompensationHoldDuration();
-  void setDriftCompensationHoldDuration(uint8_t dhd);
-
-  union SliderOrWheelEnable
-  {
-    struct
-    {
-      uint8_t space0 : 6;
-      uint8_t wheel : 1;
-      uint8_t enable : 1;
-    };
-    uint8_t bytes;
-  };
-  // when slider or wheel is enabled only channels 0,1,2 can be used
-  // default = disabled
+  void setDriftCompensationHoldDuration(uint8_t dchd);
   bool sliderOrWheelEnabled();
   void disableSliderAndWheel();
   void enableSlider();
   void enableWheel();
-
-  // prolongs the charge-transfer period of signal acquisition
-  // allows full charge-transfer for keys with heavy Rs/Cx loading
-  // increments of 1us
-  // default = 0
   uint8_t getChargeDuration();
   void setChargeDuration(uint8_t cd);
-
-  // default = 10
-  // do not use zero as this causes a key to go into detection when
-  // its signal is equal to its reference
   uint8_t getKeyDetectThreshold(uint8_t key);
-  void setKeyDetectThreshold(uint8_t key,
-    uint8_t threshold);
-
-  union KeyControl
-  {
-    struct
-    {
-      uint8_t enable_key_output : 1;
-      uint8_t key_output : 1;
-      uint8_t adjacent_key_suppression_group : 2;
-      uint8_t guard : 1;
-      uint8_t space : 3;
-    };
-    uint8_t bytes;
-  };
+  void setKeyDetectThreshold(uint8_t key, uint8_t threshold);
   KeyControl getKeyControl(uint8_t key);
-  void setKeyControl(uint8_t key,
-    KeyControl key_control);
-
-  union KeyPulseScale
-  {
-    struct
-    {
-      uint8_t scale : 4;
-      uint8_t pulse : 4;
-    };
-    uint8_t bytes;
-  };
+  void setKeyControl(uint8_t key, KeyControl key_control);
   KeyPulseScale getKeyPulseScale(uint8_t key);
-  void setKeyPulseScale(uint8_t key,
-    KeyPulseScale key_pulse_scale);
-
+  void setKeyPulseScale(uint8_t key, KeyPulseScale key_pulse_scale);
   uint16_t getKeySignal(uint8_t key);
   uint16_t getKeyReference(uint8_t key);
 };

@@ -4,13 +4,12 @@
 // Authors:
 // Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
+
 #ifndef REGISTER_ADDRESSES_H
 #define REGISTER_ADDRESSES_H
 
-namespace RegisterAddresses
-{
-enum struct AT42QT1060
-{
+namespace RegisterAddresses {
+enum struct AT42QT1060 {
   CHIP_ID = 0,
   VERSION,
   STATUS = 4,
@@ -22,7 +21,7 @@ enum struct AT42QT1060
   LOW_POWER_MODE = 22,
   IO_MASK,
   KEY_MASK,
-  ADJACENT_KEY_SUPRESSION_MASK,
+  ADJACENT_KEY_SUPPRESSION_MASK,
   PWM_MASK,
   DETECTION_MASK,
   ACTIVE_LEVEL_MASK,
@@ -33,8 +32,7 @@ enum struct AT42QT1060
   KEY_REFERENCE = 52,
 };
 
-enum struct AT42QT1070
-{
+enum struct AT42QT1070 {
   CHIP_ID = 0,
   VERSION,
   STATUS,
@@ -50,8 +48,7 @@ enum struct AT42QT1070
   RESET,
 };
 
-enum struct AT42QT2120
-{
+enum struct AT42QT2120 {
   CHIP_ID = 0,
   VERSION,
   STATUS,
@@ -72,8 +69,7 @@ enum struct AT42QT2120
   KEY_REFERENCE = 76,
 };
 
-enum struct AT42QT2160
-{
+enum struct AT42QT2160 {
   CHIP_ID = 0,
   VERSION,
   STATUS,
@@ -101,6 +97,6 @@ enum struct AT42QT2160
   KEY_SIGNAL = 100,
   KEY_REFERENCE = 132,
 };
+} // namespace RegisterAddresses
 
-}
 #endif

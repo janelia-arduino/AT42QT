@@ -1,28 +1,140 @@
+#+OPTIONS: toc:1 |:t ^:nil tags:nil
 #+TITLE: AT42QT
 #+AUTHOR: Peter Polidoro
 #+EMAIL: peter@polidoro.io
 
 * Library Information
-  - Name :: AT42QT
-  - Version :: 0.6.0
-  - License :: BSD
-  - URL :: https://github.com/janelia-arduino/AT42QT
-  - Author :: Peter Polidoro
-  - Email :: peter@polidoro.io
+- Name :: AT42QT
+- Version :: 0.7.2
+- License :: BSD
+- URL :: https://github.com/janelia-arduino/AT42QT
+- Author :: Peter Polidoro
+- Email :: peter@polidoro.io
 
-		Arduino library for the Microchip AT42QTxxxx family of capacitive touch controllers.
+** Description
 
-	This library works with AT42QT1060, AT42QT1070, AT42QT2120, and AT42QT2160.
+Arduino library for selected Microchip AT42QT capacitive touch controllers.
 
-** Functionality
+Supported chips:
 
-	| Device     | Key Count Max | Completeness | Compiles | Tested on Hardware |
-	|------------+---------------+--------------+----------+--------------------|
-	| AT42QT1060 |             6 | Partial      | Yes      | No                 |
-	| AT42QT1070 |             7 | Partial      | Yes      | No                 |
-	| AT42QT2120 |            12 | Complete     | Yes      | Yes                |
-	| AT42WT2160 |   16 (Matrix) | Partial      | Yes      | No                 |
+- =AT42QT1060=
+- =AT42QT1070=
+- =AT42QT2120=
+- =AT42QT2160=
 
-* Library Examples
+This library does not attempt to provide generic support for the full AT42QT
+product family. Support is implemented per device, against each chip's register
+map and documented behavior.
 
-  [[./examples]]
+This refresh brings the repo in line with the newer library layout used in
+=TCA6408=: Pixi tasks, repository-wide clang-format support, clearer metadata,
+native tests, and a safer I2C core with typed errors.
+
+* Quick Start
+
+The preferred flow is that the sketch configures the =TwoWire= bus and then
+passes that configured bus into the device instance with =setup()=.
+
+#+BEGIN_SRC cpp
+#include <AT42QT2120.h>
+
+TwoWire &wire = Wire;
+AT42QT2120 touch_sensor;
+
+void setup() {
+  wire.begin();
+  touch_sensor.setup(wire);
+
+  if (!touch_sensor.communicating()) {
+    return;
+  }
+
+  touch_sensor.triggerCalibration();
+}
+#+END_SRC
+
+Legacy sketches can still call =begin()=, which configures the pins and starts
+the bus selected in the constructor.
+
+** Typed I2C results
+
+The common driver now records I2C failures and exposes them through
+=getLastI2cError()=. The typed result APIs are available from the common base
+class for code that needs communication status before using a value.
+
+Current =at42qt::I2cError= values:
+
+- =None=
+- =NotInitialized=
+- =InvalidKey=
+- =DataTooLong=
+- =AddressNack=
+- =DataNack=
+- =OtherBusError=
+- =RequestFailed=
+- =ShortRead=
+
+* Chip Coverage
+
+- =AT42QT1060=: status, key thresholds, drift and measurement controls, IO and
+  mask registers, signal/reference reads, and output-related helpers.
+- =AT42QT1070=: status, key thresholds, AKS and integrator settings,
+  signal/reference reads, low-power interval, and max-on duration.
+- =AT42QT2120=: status, timing controls, slider/wheel configuration,
+  per-key control and pulse/scale, signal/reference reads.
+- =AT42QT2160=: status, timing controls, per-key thresholds and burst lengths,
+  common-change helpers, GPIO wake register, signal/reference reads.
+
+* Compatibility Notes
+
+- =AT42QT1070= and =AT42QT2120= support in this library is for I2C/comms mode.
+  Their standalone modes use fixed behavior and are not the target of this API.
+- =AT42QT2160= support is based on the revision covered by the datasheet in
+  this repository. The datasheet also documents an I2C multi-slave erratum, so
+  shared-bus use should be reviewed carefully in hardware designs.
+
+* Validation Notes
+
+- Native tests cover register access helpers and byte-level encode/decode paths.
+- PlatformIO example builds and hardware revalidation were not completed in the
+  current environment before this release.
+
+* Bugs Fixed
+
+- Invalid key indices no longer silently map to the last valid key.
+- =AT42QT1060::getAdjacentKeySuppressionMask()= now reads the correct register.
+- =AT42QT2160::getStatus()= now reads the documented 5-byte status block rather
+  than over-reading 8 bytes.
+
+* Examples
+
+- [[./examples/PollingAT42QT1060/PollingAT42QT1060.ino][examples/PollingAT42QT1060/PollingAT42QT1060.ino]]
+- [[./examples/PollingAT42QT1070/PollingAT42QT1070.ino][examples/PollingAT42QT1070/PollingAT42QT1070.ino]]
+- [[./examples/PollingAT42QT2120/PollingAT42QT2120.ino][examples/PollingAT42QT2120/PollingAT42QT2120.ino]]
+- [[./examples/PollingAT42QT2160/PollingAT42QT2160.ino][examples/PollingAT42QT2160/PollingAT42QT2160.ino]]
+- [[./examples/InterruptAT42QT2120/InterruptAT42QT2120.ino][examples/InterruptAT42QT2120/InterruptAT42QT2120.ino]]
+- [[./examples/MultipleDevices/MultipleDevices.ino][examples/MultipleDevices/MultipleDevices.ino]]
+
+* Build and Verification
+
+Preferred local workflow with Pixi:
+
+#+BEGIN_SRC sh
+pixi install
+pixi run pio-version
+pixi run format-check
+pixi run test
+pixi run build examples/PollingAT42QT2120 pico
+pixi run build examples/PollingAT42QT2160 pico
+pixi run release-check
+#+END_SRC
+
+Equivalent direct commands without Pixi:
+
+#+BEGIN_SRC sh
+make native-test
+python3 tools/clang_format_all.py --check
+python3 tools/version_sync.py check
+python3 tools/pio_task.py build --example examples/PollingAT42QT2120 --env pico
+python3 tools/pio_task.py build --example examples/PollingAT42QT2160 --env pico
+#+END_SRC

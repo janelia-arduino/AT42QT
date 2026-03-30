@@ -1,6 +1,5 @@
 #include <AT42QT1060.h>
 
-
 const long BAUD = 115200;
 const int RESET_DELAY = 2000;
 const int CALIBRATION_LOOP_DELAY = 50;
@@ -11,10 +10,8 @@ AT42QT1060 touch_sensor;
 
 unsigned long loop_counter;
 
-void printKeyStatus(AT42QT1060::Status status, uint8_t key_count)
-{
-  for (uint8_t key=0; key < key_count; ++key)
-  {
+void printKeyStatus(AT42QT1060::Status status, uint8_t key_count) {
+  for (uint8_t key = 0; key < key_count; ++key) {
     if ((key != 0) && (key < 10))
       Serial.print("  ");
     else if (key >= 10)
@@ -22,23 +19,21 @@ void printKeyStatus(AT42QT1060::Status status, uint8_t key_count)
     Serial.print(key);
   }
   Serial.println();
-  for (uint8_t key=0; key < key_count; ++key)
-  {
+  for (uint8_t key = 0; key < key_count; ++key) {
     if (key != 0)
       Serial.print("  ");
-    Serial.print(touch_sensor.touched(status,key));
+    Serial.print(touch_sensor.touched(status, key));
   }
   Serial.println();
 }
 
-void setup()
-{
+void setup() {
   Serial.begin(BAUD);
 
-  touch_sensor.begin();
+  Wire.begin();
+  touch_sensor.setup(Wire);
 
-  if (!touch_sensor.communicating())
-  {
+  if (!touch_sensor.communicating()) {
     return;
   }
 
@@ -49,8 +44,7 @@ void setup()
   Serial.println("triggerCalibration");
   touch_sensor.triggerCalibration();
   delay(CALIBRATION_LOOP_DELAY);
-  while (touch_sensor.calibrating())
-  {
+  while (touch_sensor.calibrating()) {
     Serial.println("calibrating...");
     delay(CALIBRATION_LOOP_DELAY);
   }
@@ -59,13 +53,12 @@ void setup()
   loop_counter = 0;
 }
 
-void loop()
-{
+void loop() {
   delay(LOOP_DELAY);
 
-  if (!touch_sensor.communicating())
-  {
-    Serial.println("Not communicating! Is chip connected and powered properly?");
+  if (!touch_sensor.communicating()) {
+    Serial.println(
+        "Not communicating! Is chip connected and powered properly?");
     return;
   }
 
@@ -78,7 +71,7 @@ void loop()
   Serial.print("status.keys: ");
   Serial.println(status.keys, BIN);
 
-  printKeyStatus(status,touch_sensor.KEY_COUNT);
+  printKeyStatus(status, touch_sensor.KEY_COUNT);
 
   Serial.println();
   ++loop_counter;
