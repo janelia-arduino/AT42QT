@@ -96,8 +96,8 @@ Current =at42qt::I2cError= values:
 * Validation Notes
 
 - Native tests cover register access helpers and byte-level encode/decode paths.
-- PlatformIO example builds and hardware revalidation were not completed in the
-  current environment before this release.
+- PlatformIO example builds were completed in the current environment.
+- Hardware revalidation was not completed before this release.
 
 * Bugs Fixed
 
@@ -114,6 +114,8 @@ Current =at42qt::I2cError= values:
 - [[./examples/PollingAT42QT2160/PollingAT42QT2160.ino][examples/PollingAT42QT2160/PollingAT42QT2160.ino]]
 - [[./examples/InterruptAT42QT2120/InterruptAT42QT2120.ino][examples/InterruptAT42QT2120/InterruptAT42QT2120.ino]]
 - [[./examples/MultipleDevices/MultipleDevices.ino][examples/MultipleDevices/MultipleDevices.ino]]
+- [[./examples/TwoAT42QT2120/TwoAT42QT2120.ino][examples/TwoAT42QT2120/TwoAT42QT2120.ino]]
+- [[./examples/TwoAT42QT2120Int/TwoAT42QT2120Int.ino][examples/TwoAT42QT2120Int/TwoAT42QT2120Int.ino]]
 
 * Build and Verification
 
